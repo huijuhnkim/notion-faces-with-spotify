@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Success - Notion Faces with Spotify</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #1DB954;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #191414;
+            margin: 10px 0;
+        }
+        .email {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin: 30px 0;
+        }
+        .section h2 {
+            color: #1DB954;
+            border-bottom: 2px solid #1DB954;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+        .item-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        .item-info {
+            flex-grow: 1;
+        }
+        .item-name {
+            font-weight: 600;
+            color: #191414;
+        }
+        .item-artist {
+            color: #666;
+            font-size: 14px;
+        }
+        .next-btn {
+            background-color: #1DB954;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 20px auto;
+            display: block;
+            width: fit-content;
+        }
+        .next-btn:hover {
+            background-color: #1ed760;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            {% if user.images %}
+                <img src="{{ user.images.0.url }}" alt="Profile" class="profile-img">
+            {% else %}
+                <img src="{% static 'images/face-icon.png' %}" alt="Profile" class="profile-img">
+            {% endif %}
+            <h1>Welcome, {{ user.display_name }}!</h1>
+            <p class="email">{{ user.email }}</p>
+        </div>
+
+        <div class="section">
+            <h2>🎵 Your Top Artists (Last 4 Weeks)</h2>
+            {% for artist in top_artists %}
+            <div class="item">
+                {% if artist.images %}
+                    <img src="{{ artist.images.0.url }}" alt="{{ artist.name }}" class="item-img">
+                {% endif %}
+                <div class="item-info">
+                    <div class="item-name">{{ artist.name }}</div>
+                    <div class="item-artist">{{ artist.followers.total|floatformat:0 }} followers</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <h2>🎶 Your Top Tracks (Last 4 Weeks)</h2>
+            {% for track in top_tracks %}
+            <div class="item">
+                {% if track.album.images %}
+                    <img src="{{ track.album.images.0.url }}" alt="{{ track.name }}" class="item-img">
+                {% endif %}
+                <div class="item-info">
+                    <div class="item-name">{{ track.name }}</div>
+                    <div class="item-artist">{{ track.artists.0.name }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <p style="text-align: center; color: #666; margin-top: 30px;">
+            ✅ Successfully connected to Spotify! Next step: Generate your Notion face based on this data.
+        </p>
+    </div>
+</body>
+</html>
