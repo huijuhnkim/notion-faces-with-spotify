@@ -21,87 +21,69 @@ Therefore, I would have to come up with a custom model for deriving musical tast
 Available API Endpoints in Development Mode:
 
 ✅ User Profile Data
-
-User's display name, email, country, subscription type
-Profile images
-Follower count
+- User's display name, email, country, subscription type
+- Profile images
+- Follower count
 
 ✅ Listening History
-
-Top Artists - up to 50 artists for short/medium/long term
-Top Tracks - up to 50 tracks for short/medium/long term
-Recently Played - last 50 tracks played
-Track details: name, artist, album, popularity, duration, explicit flag, release date
+- Top Artists - up to 50 artists for short/medium/long term
+- Top Tracks - up to 50 tracks for short/medium/long term
+- Recently Played - last 50 tracks played
+- Track details: name, artist, album, popularity, duration, explicit flag, release date
 
 ✅ Artist Information
-
-Artist genres (this is key for your face mapping!)
-Artist popularity (0-100)
-Artist images
-Follower counts
+- Artist genres (this is key for your face mapping!)
+- Artist popularity (0-100)
+- Artist images
+- Follower counts
 
 ✅ Playlists
-
-User's playlists
-Playlist tracks
-Collaborative playlist info
+- User's playlists
+- Playlist tracks
+- Collaborative playlist info
 
 ✅ Library
-
-Saved tracks
-Saved albums
-Saved shows/podcasts
-Following status for artists
+- Saved tracks
+- Saved albums
+- Saved shows/podcasts
+- Following status for artists
 
 ✅ Search
+- Search for tracks, artists, albums, playlists
 
-Search for tracks, artists, albums, playlists
-
-❌ NOT Available in Development Mode
-
-Audio Features (energy, danceability, valence, etc.)
-Audio Analysis (detailed tempo, key, sections)
-Recommendations endpoint
-
-Data You Can Use for Face Generation:
+### Data You Can Use for Face Generation:
 
 Genre Analysis (from artists)
-
-Musical style diversity
-Dominant genres
-Niche vs mainstream genres
+- Musical style diversity
+- Dominant genres
+- Niche vs mainstream genres
 
 
 Popularity Metrics
-
-Artist popularity average
-Track popularity average
-Mainstream vs indie ratio
+- Artist popularity average
+- Track popularity average
+- Mainstream vs indie ratio
 
 
 Listening Patterns
-
-Recent vs all-time favorites
-Artist loyalty (repeat artists)
-Discovery rate (new artists)
+- Recent vs all-time favorites
+- Artist loyalty (repeat artists)
+- Discovery rate (new artists)
 
 
 Time-based Preferences
-
-How your taste changes over time
-Seasonal patterns
-Consistency of preferences
+- How your taste changes over time
+- Seasonal patterns
+- Consistency of preferences
 
 
 Content Characteristics
-
-Explicit content ratio
-Release date patterns (old vs new music)
-Track duration preferences
+- Explicit content ratio
+- Release date patterns (old vs new music)
+- Track duration preferences
 
 
 Diversity Metrics
-
-Number of unique artists
-Number of unique genres
-Geographic diversity (artist countries)
+- Number of unique artists
+- Number of unique genres
+- Geographic diversity (artist countries)
