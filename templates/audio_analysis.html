@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Audio Analysis - Notion Faces with Spotify</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #1DB954;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #191414;
+            margin: 10px 0;
+        }
+        h2 {
+            color: #1DB954;
+            margin-top: 30px;
+        }
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th {
+            background-color: #1DB954;
+            color: white;
+            padding: 10px 8px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+            white-space: nowrap;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .track-name {
+            font-weight: 600;
+            color: #191414;
+        }
+        .artist-name {
+            color: #666;
+            font-size: 12px;
+        }
+        /* Color coding for values */
+        .high-value {
+            background-color: rgba(29, 185, 84, 0.2);
+            font-weight: 600;
+        }
+        .medium-value {
+            background-color: rgba(255, 193, 7, 0.2);
+        }
+        .low-value {
+            background-color: rgba(255, 87, 34, 0.2);
+        }
+        .summary-box {
+            background: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .summary-item {
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .summary-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1DB954;
+        }
+        .info-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .tooltip {
+            cursor: help;
+            border-bottom: 1px dotted #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 Audio Feature Analysis</h1>
+            <p>Welcome, {{ user.display_name }}! Here's a detailed breakdown of your top 10 tracks.</p>
+        </div>
+
+        <div class="info-box">
+            <strong>📊 Feature Explanations:</strong><br>
+            • <strong>Danceability:</strong> How suitable for dancing (0.0-1.0)<br>
+            • <strong>Energy:</strong> Intensity and activity (0.0-1.0)<br>
+            • <strong>Valence:</strong> Musical positivity/happiness (0.0-1.0)<br>
+            • <strong>Acousticness:</strong> Confidence track is acoustic (0.0-1.0)<br>
+            • <strong>Speechiness:</strong> Presence of spoken words (0.0-1.0)<br>
+            • <strong>Tempo:</strong> Beats per minute (BPM)
+        </div>
+
+        <h2>Your Top 10 Tracks - Detailed Analysis</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Track</th>
+                        <th>Popularity</th>
+                        <th>Duration</th>
+                        <th>Danceability</th>
+                        <th>Energy</th>
+                        <th>Key</th>
+                        <th>Loudness (dB)</th>
+                        <th>Mode</th>
+                        <th>Speechiness</th>
+                        <th>Acousticness</th>
+                        <th>Instrumental</th>
+                        <th>Liveness</th>
+                        <th>Valence</th>
+                        <th>Tempo (BPM)</th>
+                        <th>Time Sig</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for track in tracks %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <div class="track-name">{{ track.name }}</div>
+                            <div class="artist-name">{{ track.artist }}</div>
+                        </td>
+                        <td>{{ track.popularity }}</td>
+                        <td>{{ track.duration_min }}</td>
+                        <td class="{% if track.danceability > 0.7 %}high-value{% elif track.danceability > 0.4 %}medium-value{% else %}low-value{% endif %}">
+                            {{ track.danceability }}
+                        </td>
+                        <td class="{% if track.energy > 0.7 %}high-value{% elif track.energy > 0.4 %}medium-value{% else %}low-value{% endif %}">
+                            {{ track.energy }}
+                        </td>
+                        <td>{{ track.key }}</td>
+                        <td>{{ track.loudness }}</td>
+                        <td>{% if track.mode == 1 %}Major{% else %}Minor{% endif %}</td>
+                        <td>{{ track.speechiness }}</td>
+                        <td class="{% if track.acousticness > 0.7 %}high-value{% endif %}">
+                            {{ track.acousticness }}
+                        </td>
+                        <td>{{ track.instrumentalness }}</td>
+                        <td>{{ track.liveness }}</td>
+                        <td class="{% if track.valence > 0.7 %}high-value{% elif track.valence > 0.4 %}medium-value{% else %}low-value{% endif %}">
+                            {{ track.valence }}
+                        </td>
+                        <td>{{ track.tempo }}</td>
+                        <td>{{ track.time_signature }}/4</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary-box">
+            <h2>📈 Your Music Profile Averages</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-label">Danceability</div>
+                    <div class="summary-value">{{ averages.danceability }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Energy</div>
+                    <div class="summary-value">{{ averages.energy }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Valence</div>
+                    <div class="summary-value">{{ averages.valence }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Acousticness</div>
+                    <div class="summary-value">{{ averages.acousticness }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Tempo</div>
+                    <div class="summary-value">{{ averages.tempo|floatformat:0 }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Loudness</div>
+                    <div class="summary-value">{{ averages.loudness|floatformat:1 }} dB</div>
+                </div>
+            </div>
+        </div>
+
+        <p style="text-align: center; color: #666; margin-top: 30px;">
+            ✅ Analysis complete! These features will be used to generate your unique Notion face.
+        </p>
+    </div>
+</body>
+</html>

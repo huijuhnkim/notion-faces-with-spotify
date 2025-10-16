@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Your Music Face - Notion Faces with Spotify</title>
+    <style>
+        /* ... existing styles ... */
+        .loading {
+            display: none;
+            color: #666;
+            margin-top: 10px;
+        }
+        .error-message {
+            display: none;
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 {{ user.display_name }}'s Music Face</h1>
+
+        <!-- Debug info -->
+        <div style="background: #f0f0f0; padding: 10px; margin: 20px 0; border-radius: 5px;">
+            <strong>Debug - Face URL:</strong><br>
+            <code id="faceUrl">{{ face_url }}</code><br>
+            <strong>Face Params:</strong> <code>{{ face_params }}</code>
+        </div>
+
+        <!-- Face image with fallback -->
+        <div id="faceContainer">
+            <img src="{{ face_url }}"
+                 alt="Your Music Face"
+                 class="face-image"
+                 id="faceImage"
+                 onerror="handleImageError()">
+            <div class="loading" id="loading">Loading your face...</div>
+            <div class="error-message" id="errorMsg">
+                Face couldn't load. Try the direct link below.
+            </div>
+        </div>
+
+        <!-- Direct link as backup -->
+        <div style="margin: 20px 0;">
+            <a href="{{ face_url }}" target="_blank" style="color: #1DB954;">
+                Open face in new tab →
+            </a>
+        </div>
+
+        <!-- Rest of your content... -->
+        <div>
+            <div class="metric-card">
+                <strong>Genre Diversity:</strong> {{ metrics.genre_diversity }}
+            </div>
+            <!-- ... other metrics ... -->
+        </div>
+
+        <h3>Your Top Genres</h3>
+        {% for genre, count in top_genres %}
+            <span class="genre-item">{{ genre }}</span>
+        {% endfor %}
+    </div>
+
+    <script>
+        let retryCount = 0;
+        const maxRetries = 3;
+        const faceUrl = document.getElementById('faceUrl').textContent;
+
+        function handleImageError() {
+            console.log('Image failed to load, retry:', retryCount);
+
+            if (retryCount < maxRetries) {
+                retryCount++;
+                document.getElementById('loading').style.display = 'block';
+
+                // Try with a slight delay
+                setTimeout(() => {
+                    const img = document.getElementById('faceImage');
+                    // Add timestamp to force reload
+                    img.src = faceUrl + '&t=' + Date.now();
+                }, 1000);
+            } else {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorMsg').style.display = 'block';
+                console.log('Failed to load after', maxRetries, 'retries');
+                console.log('Face URL:', faceUrl);
+            }
+        }
+
+        // Check if image loaded successfully
+        window.onload = function() {
+            const img = document.getElementById('faceImage');
+            if (img.complete && img.naturalHeight === 0) {
+                handleImageError();
+            }
+        }
+    </script>
+</body>
+</html>
